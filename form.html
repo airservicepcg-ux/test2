@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Create Work Order</title>
+</head>
+
+<body>
+
+<h2>Create Work Order</h2>
+
+<form id="woForm">
+
+<label>First Name</label><br>
+<input type="text" id="firstName" required><br><br>
+
+<label>Last Name</label><br>
+<input type="text" id="lastName" required><br><br>
+
+<label>Department</label><br>
+<input type="text" id="department" required><br><br>
+
+<label>Issue</label><br>
+<textarea id="issue" required></textarea><br><br>
+
+<button type="submit">Submit</button>
+
+</form>
+
+<p id="result"></p>
+
+<script>
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbxHDAakCZ5Py3PXLqr5dVpODg74Svt6yobSkUZ9yieaxk4IVfWZ0DAKIgkLmB2Uf5Xk/exec";
+
+document.getElementById("woForm").addEventListener("submit", function(e){
+
+e.preventDefault();
+
+const data = {
+
+firstName: document.getElementById("firstName").value,
+lastName: document.getElementById("lastName").value,
+department: document.getElementById("department").value,
+issue: document.getElementById("issue").value
+
+};
+
+fetch(scriptURL, {
+method: "POST",
+body: JSON.stringify(data)
+})
+.then(res => res.json())
+.then(res => {
+
+document.getElementById("result").innerHTML =
+"Work Order Created : " + res.wo;
+
+});
+
+});
+
+</script>
+
+</body>
+</html>

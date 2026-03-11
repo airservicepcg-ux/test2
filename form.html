@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <meta charset="UTF-8">
-<title>Submit Problem</title>
+<title>Report Problem</title>
 
 <style>
 
 body{
 font-family: Arial;
-background:#f4f4f4;
+background:#f5f5f5;
 padding:40px;
 }
 
@@ -17,7 +18,7 @@ padding:40px;
 width:400px;
 background:white;
 padding:25px;
-border-radius:8px;
+border-radius:10px;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
@@ -37,7 +38,7 @@ padding:10px;
 border:none;
 width:100%;
 font-size:16px;
-border-radius:4px;
+border-radius:5px;
 cursor:pointer;
 }
 
@@ -46,7 +47,7 @@ background:#1b5e20;
 }
 
 #msg{
-margin-top:15px;
+margin-top:10px;
 font-weight:bold;
 color:green;
 }
@@ -85,31 +86,33 @@ document.getElementById("reportForm").addEventListener("submit", function(e){
 
 e.preventDefault();
 
-let name = document.getElementById("name").value;
-let problem = document.getElementById("problem").value;
+const formData = new FormData();
+
+formData.append("name", document.getElementById("name").value);
+formData.append("problem", document.getElementById("problem").value);
 
 fetch(scriptURL,{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-name:name,
-problem:problem
-})
+body:formData
 })
 .then(res => res.json())
 .then(data => {
 
 if(data.status === "success"){
-document.getElementById("msg").innerHTML = "ส่งข้อมูลเรียบร้อยแล้ว";
+
+document.getElementById("msg").innerHTML="ส่งข้อมูลเรียบร้อย";
+
 document.getElementById("reportForm").reset();
+
 }
 
 })
-.catch(err=>{
-document.getElementById("msg").innerHTML = "เกิดข้อผิดพลาด";
+.catch(err => {
+
+document.getElementById("msg").innerHTML="เกิดข้อผิดพลาด";
+
 console.log(err);
+
 });
 
 });
@@ -117,4 +120,5 @@ console.log(err);
 </script>
 
 </body>
+
 </html>

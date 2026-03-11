@@ -1,61 +1,115 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<title>Create Work Order</title>
+<title>Submit Problem</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#f4f4f4;
+padding:40px;
+}
+
+.container{
+width:400px;
+background:white;
+padding:25px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:4px;
+}
+
+button{
+background:#2e7d32;
+color:white;
+padding:10px;
+border:none;
+width:100%;
+font-size:16px;
+border-radius:4px;
+cursor:pointer;
+}
+
+button:hover{
+background:#1b5e20;
+}
+
+#msg{
+margin-top:15px;
+font-weight:bold;
+color:green;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<h2>Create Work Order</h2>
+<div class="container">
 
-<form id="woForm">
+<h2>Report Problem</h2>
 
-<label>First Name</label><br>
-<input type="text" id="firstName" required><br><br>
+<form id="reportForm">
 
-<label>Last Name</label><br>
-<input type="text" id="lastName" required><br><br>
+<label>Name</label>
+<input type="text" id="name" required>
 
-<label>Department</label><br>
-<input type="text" id="department" required><br><br>
-
-<label>Issue</label><br>
-<textarea id="issue" required></textarea><br><br>
+<label>Problem</label>
+<textarea id="problem" required></textarea>
 
 <button type="submit">Submit</button>
 
 </form>
 
-<p id="result"></p>
+<div id="msg"></div>
+
+</div>
 
 <script>
 
-const scriptURL = "https://script.google.com/macros/s/AKfycbxHDAakCZ5Py3PXLqr5dVpODg74Svt6yobSkUZ9yieaxk4IVfWZ0DAKIgkLmB2Uf5Xk/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbxDg1g9TPA7zl4GZulzinVQ7n7P8RLU6qeMyQ2I27GfOsmY2jNtX0Rqu3-KTLIK6T4W/exec";
 
-document.getElementById("woForm").addEventListener("submit", function(e){
+document.getElementById("reportForm").addEventListener("submit", function(e){
 
 e.preventDefault();
 
-const data = {
+let name = document.getElementById("name").value;
+let problem = document.getElementById("problem").value;
 
-firstName: document.getElementById("firstName").value,
-lastName: document.getElementById("lastName").value,
-department: document.getElementById("department").value,
-issue: document.getElementById("issue").value
-
-};
-
-fetch(scriptURL, {
-method: "POST",
-body: JSON.stringify(data)
+fetch(scriptURL,{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+name:name,
+problem:problem
+})
 })
 .then(res => res.json())
-.then(res => {
+.then(data => {
 
-document.getElementById("result").innerHTML =
-"Work Order Created : " + res.wo;
+if(data.status === "success"){
+document.getElementById("msg").innerHTML = "ส่งข้อมูลเรียบร้อยแล้ว";
+document.getElementById("reportForm").reset();
+}
 
+})
+.catch(err=>{
+document.getElementById("msg").innerHTML = "เกิดข้อผิดพลาด";
+console.log(err);
 });
 
 });
